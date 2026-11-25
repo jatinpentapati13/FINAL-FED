@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warehouses – SmartStock</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Google Fonts – Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/inventory.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar"></aside>
+      <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <nav id="topNavbar" class="top-navbar"></nav>
+
+        <div class="page-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+              "
+            >
+              <div>
+                <h1 class="page-title">Warehouses</h1>
+                <p class="page-subtitle">Manage storage locations</p>
+              </div>
+              <button class="btn-primary" onclick="openAddWarehouseModal()">
+                <i class="fas fa-plus me-2"></i>Add Warehouse
+              </button>
+            </div>
+          </div>
+
+          <!-- Search / Filter Bar -->
+          <div class="filters-bar">
+            <div style="position: relative">
+              <i
+                class="fas fa-search"
+                style="
+                  position: absolute;
+                  left: 12px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: #94a3b8;
+                  pointer-events: none;
+                "
+              ></i>
+              <input
+                type="text"
+                id="searchWarehouses"
+                class="form-control"
+                placeholder="Search warehouses…"
+                style="padding-left: 36px; min-width: 250px"
+                oninput="filterWarehouses()"
+              />
+            </div>
+
+            <select
+              id="filterWarehouseStatus"
+              class="form-select"
+              style="max-width: 160px"
+              onchange="filterWarehouses()"
+            >
+              <option value="">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+
+            <span
+              id="warehouseCount"
+              style="font-size: 0.875rem; color: #64748b; white-space: nowrap"
+            ></span>
+          </div>
+
+          <!-- Warehouse Cards Grid -->
+          <div
+            id="warehousesGrid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+              gap: 1rem;
+            "
+          ></div>
+
+          <!-- Empty State -->
+          <div
+            id="warehousesEmptyState"
+            class="empty-state"
+            style="display: none"
+          >
+            <i class="fas fa-warehouse"></i>
+            <h5>No warehouses found</h5>
+            <p>Add your first warehouse to get started.</p>
+            <button
+              class="btn-primary"
+              onclick="openAddWarehouseModal()"
+              style="
+                margin-top: 1rem;
+                padding: 8px 20px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+              "
+            >
+              Add Warehouse
+            </button>
+          </div>
+        </div>
+        <!-- /page-content -->
+      </div>
+      <!-- /main-content -->
+    </div>
+    <!-- /app-layout -->
+
+    <!-- ============================================================
+     ADD / EDIT WAREHOUSE MODAL
+     ============================================================ -->
+    <div id="warehouseModal" class="modal-overlay" style="display: none">
+      <div class="modal" style="max-width: 560px; width: 95%">
+        <div class="modal-header">
+          <h5 id="warehouseModalTitle">Add Warehouse</h5>
+          <button
+            onclick="closeWarehouseModal()"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.2rem;
+              cursor: pointer;
+              color: #64748b;
+            "
+            aria-label="Close"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="wm_id" />
+          <div class="row g-3">
+            <!-- Warehouse Name -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label"
+                  >Warehouse Name <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  id="wm_name"
+                  class="form-control"
+                  placeholder="e.g. Main Depot"
+                />
+                <div class="invalid-feedback" id="wm_name_err"></div>
+              </div>
+            </div>
+            <!-- Location -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label"
+                  >Location <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  id="wm_location"
+                  class="form-control"
+                  placeholder="City / Address"
+                />
+                <div class="invalid-feedback" id="wm_location_err"></div>
+              </div>
+            </div>
+            <!-- Manager -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">Manager Name</label>
+                <input
+                  type="text"
+                  id="wm_manager"
+                  class="form-control"
+                  placeholder="Manager's full name"
+                />
+              </div>
+            </div>
+            <!-- Capacity -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">Capacity (units)</label>
+                <input
+                  type="number"
+                  id="wm_capacity"
+                  class="form-control"
+                  placeholder="e.g. 10000"
+                  min="0"
+                />
+              </div>
+            </div>
+            <!-- Status -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select id="wm_status" class="form-select">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /modal-body -->
+
+        <div class="modal-footer">
+          <button
+            onclick="closeWarehouseModal()"
+            style="
+              padding: 8px 16px;
+              border-radius: 8px;
+              border: 1px solid #e2e8f0;
+              background: white;
+              cursor: pointer;
+              font-weight: 500;
+              color: #475569;
+            "
+          >
+            Cancel
+          </button>
+          <button
+            onclick="saveWarehouse()"
+            class="btn-primary"
+            style="
+              padding: 8px 16px;
+              border-radius: 8px;
+              border: none;
+              cursor: pointer;
+              font-weight: 500;
+            "
+          >
+            Save Warehouse
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+     DELETE CONFIRMATION MODAL
+     ============================================================ -->
+    <div id="deleteWarehouseModal" class="modal-overlay" style="display: none">
+      <div class="modal" style="max-width: 400px; width: 95%">
+        <div class="modal-header">
+          <h5>Delete Warehouse</h5>
+          <button
+            onclick="closeDeleteWarehouseModal()"
+            style="
+              background: none;
+              border: none;
+              font-size: 1.2rem;
+              cursor: pointer;
+              color: #64748b;
+            "
+            aria-label="Close"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="text-align: center; padding: 1rem">
+            <i
+              class="fas fa-trash-alt"
+              style="
+                font-size: 3rem;
+                color: #ef4444;
+                margin-bottom: 1rem;
+                display: block;
+              "
+            ></i>
+            <p>
+              Are you sure you want to delete
+              <strong id="deleteWarehouseName"></strong>?
+            </p>
+            <p style="color: #64748b; font-size: 0.875rem">
+              This action cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            onclick="closeDeleteWarehouseModal()"
+            style="
+              padding: 8px 16px;
+              border-radius: 8px;
+              border: 1px solid #e2e8f0;
+              background: white;
+              cursor: pointer;
+              font-weight: 500;
+              color: #475569;
+            "
+          >
+            Cancel
+          </button>
+          <button
+            onclick="confirmDeleteWarehouse()"
+            style="
+              padding: 8px 16px;
+              border-radius: 8px;
+              border: none;
+              cursor: pointer;
+              font-weight: 500;
+              background: #ef4444;
+              color: white;
+            "
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/warehouses.js"></script>
+  </body>
+</html>

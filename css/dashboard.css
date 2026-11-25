@@ -1,0 +1,670 @@
+/* ============================================================
+   SmartStock - Dashboard Styles
+   dashboard.css
+   ============================================================ */
+
+/* ---- Dashboard Greeting ---- */
+.dashboard-greeting {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.dashboard-date {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- KPI Grid ---- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- KPI Card Variants ---- */
+.kpi-icon-primary {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+}
+
+.kpi-icon-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.kpi-icon-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.kpi-icon-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.kpi-icon-info {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--info);
+}
+
+/* ---- Charts Grid ---- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ---- Chart Cards ---- */
+.chart-card {
+  background: var(--bg-surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card .card-header {
+  flex-shrink: 0;
+}
+
+.chart-card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 280px;
+  width: 100%;
+}
+
+.chart-wrapper canvas {
+  max-width: 100%;
+}
+
+/* Chart period tabs */
+.chart-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.chart-tab {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.chart-tab.active {
+  background: var(--bg-surface);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-tab:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* Chart Legend */
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.chart-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---- Inventory Health Grid ---- */
+.inventory-health-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Health stats in left panel */
+.health-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.health-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.health-stat {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.health-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Donut chart wrapper */
+.health-donut-wrapper {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+}
+
+.health-donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.health-donut-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.health-donut-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Health Legend */
+.health-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.health-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.health-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.health-legend-label {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.health-legend-count {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.health-legend-pct {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ---- Recent Activity Table ---- */
+.recent-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recent-table th {
+  background: var(--gray-50);
+  padding: 10px 16px;
+  font-size: 0.75rem;
+  color: var(--gray-600);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.recent-table td {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+  vertical-align: middle;
+  color: var(--text-primary);
+}
+
+.recent-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.recent-table tbody tr:hover {
+  background: var(--gray-50);
+}
+
+/* ---- Quick Actions ---- */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.quick-action-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  transform: translateY(-1px);
+}
+
+.quick-action-btn i {
+  font-size: 1rem;
+}
+
+.quick-action-btn.primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.quick-action-btn.primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+/* ---- Activity Feed ---- */
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.activity-avatar.success {
+  background: var(--success);
+}
+.activity-avatar.warning {
+  background: var(--warning);
+}
+.activity-avatar.danger {
+  background: var(--danger);
+}
+.activity-avatar.info {
+  background: var(--info);
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.activity-text strong {
+  font-weight: 600;
+}
+
+.activity-time {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ---- Top Products List ---- */
+.top-product-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top-product-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.top-product-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.top-product-rank.gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+.top-product-rank.silver {
+  background: rgba(148, 163, 184, 0.2);
+  color: #475569;
+}
+.top-product-rank.bronze {
+  background: rgba(180, 120, 64, 0.12);
+  color: #92400e;
+}
+
+.top-product-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.top-product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.top-product-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-product-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-product-category {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.top-product-revenue {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.top-product-trend {
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+/* ---- Summary Stats Row ---- */
+.stats-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Profit/Revenue Chart Stats ---- */
+.chart-summary {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.chart-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chart-summary-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.chart-summary-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* ---- Category Distribution ---- */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-name {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.category-pct {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.category-bar {
+  height: 6px;
+  background: var(--gray-200);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.category-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+/* ---- Low Stock Alert Panel ---- */
+.low-stock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.low-stock-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.low-stock-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.low-stock-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.low-stock-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.low-stock-sku {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.low-stock-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+/* ---- Dark Mode - Dashboard ---- */
+[data-theme="dark"] .chart-tabs {
+  background: var(--gray-200);
+}
+
+[data-theme="dark"] .chart-tab.active {
+  background: var(--bg-surface);
+}
+
+[data-theme="dark"] .quick-action-btn {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .recent-table td {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .recent-table tbody tr:hover {
+  background: rgba(79, 70, 229, 0.05);
+}

@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory — SmartStock</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome 6 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/inventory.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar"></aside>
+      <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+        onclick="closeSidebar()"
+      ></div>
+
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <nav id="topNavbar" class="top-navbar"></nav>
+
+        <div class="page-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+              "
+            >
+              <div>
+                <h1 class="page-title">Inventory Tracking</h1>
+                <p class="page-subtitle">
+                  Monitor stock levels, warehouse distribution, and perform
+                  instant stock adjustments
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="btn-secondary"
+                  onclick="window.location.href='stock-movement.html'"
+                >
+                  <i class="fas fa-arrow-right-arrow-left me-1"></i> Movement
+                  Log
+                </button>
+                <button
+                  class="btn-primary"
+                  onclick="window.location.href='products.html'"
+                >
+                  <i class="fas fa-boxes-stacked me-1"></i> Manage Products
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick KPI Cards -->
+          <div class="row g-3 mb-4" id="inventoryKpiRow">
+            <div class="col-6 col-md-3">
+              <div class="card p-3">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                      "
+                    >
+                      Total Products
+                    </div>
+                    <div
+                      id="invTotalProducts"
+                      style="
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: var(--primary);
+                      "
+                    >
+                      0
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 10px;
+                      background: rgba(79, 70, 229, 0.1);
+                      color: var(--primary);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-boxes-stacked"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card p-3">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                      "
+                    >
+                      Total Units
+                    </div>
+                    <div
+                      id="invTotalUnits"
+                      style="
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: var(--info);
+                      "
+                    >
+                      0
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 10px;
+                      background: rgba(59, 130, 246, 0.1);
+                      color: var(--info);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-layer-group"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card p-3">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                      "
+                    >
+                      Low Stock
+                    </div>
+                    <div
+                      id="invLowStock"
+                      style="
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: var(--warning);
+                      "
+                    >
+                      0
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 10px;
+                      background: rgba(245, 158, 11, 0.1);
+                      color: var(--warning);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-triangle-exclamation"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card p-3">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                      "
+                    >
+                      Out of Stock
+                    </div>
+                    <div
+                      id="invOutOfStock"
+                      style="
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: var(--danger);
+                      "
+                    >
+                      0
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 10px;
+                      background: rgba(239, 68, 68, 0.1);
+                      color: var(--danger);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-circle-xmark"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters Bar -->
+          <div class="filters-bar">
+            <div class="search-wrapper">
+              <i
+                class="fas fa-search"
+                style="
+                  position: absolute;
+                  left: 12px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: var(--gray-400);
+                  pointer-events: none;
+                "
+              ></i>
+              <input
+                type="text"
+                id="searchInventory"
+                class="form-control"
+                placeholder="Search inventory items..."
+                style="padding-left: 36px; min-width: 240px"
+                oninput="filterInventory()"
+              />
+            </div>
+
+            <select
+              id="filterCategory"
+              class="form-select filter-select"
+              style="max-width: 160px"
+              onchange="filterInventory()"
+            >
+              <option value="">All Categories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Grocery">Grocery</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Stationery">Stationery</option>
+              <option value="Home">Home</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <select
+              id="filterStatus"
+              class="form-select filter-select"
+              style="max-width: 150px"
+              onchange="filterInventory()"
+            >
+              <option value="">All Status</option>
+              <option value="In Stock">In Stock (Healthy)</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+
+            <select
+              id="filterWarehouse"
+              class="form-select filter-select"
+              style="max-width: 160px"
+              onchange="filterInventory()"
+            >
+              <option value="">All Warehouses</option>
+            </select>
+
+            <span
+              id="inventoryCount"
+              style="
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                margin-left: auto;
+                white-space: nowrap;
+              "
+            ></span>
+          </div>
+
+          <!-- Inventory Table Card -->
+          <div class="card">
+            <div class="card-body" style="padding: 0">
+              <div
+                class="table-container"
+                style="border: none; border-radius: 0"
+              >
+                <table style="width: 100%; border-collapse: collapse">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>SKU</th>
+                      <th>Category</th>
+                      <th>Stock Quantity</th>
+                      <th>Min Threshold</th>
+                      <th>Stock Level</th>
+                      <th>Warehouse</th>
+                      <th>Status</th>
+                      <th style="text-align: right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventoryTableBody">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty State -->
+              <div
+                id="inventoryEmptyState"
+                class="empty-state"
+                style="display: none"
+              >
+                <i class="fas fa-boxes-packing"></i>
+                <h5>No inventory records match</h5>
+                <p>Try clearing your active filters or check back later.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stock Adjustment Modal -->
+    <div id="stockUpdateModal" class="modal-overlay" style="display: none">
+      <div class="modal" style="max-width: 480px">
+        <div class="modal-header">
+          <h5 class="modal-title">Quick Stock Update</h5>
+          <button onclick="closeStockUpdateModal()" class="navbar-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="su_productId" />
+
+          <div
+            style="
+              background: var(--gray-50);
+              border: 1px solid var(--border-color);
+              border-radius: 10px;
+              padding: 12px 16px;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                font-weight: 700;
+                font-size: 1rem;
+                color: var(--text-primary);
+              "
+              id="su_productName"
+            >
+              —
+            </div>
+            <div
+              style="
+                font-size: 0.75rem;
+                color: var(--text-secondary);
+                margin-top: 2px;
+              "
+            >
+              SKU:
+              <span id="su_sku" style="font-family: monospace; font-weight: 600"
+                >—</span
+              >
+              | Current Stock:
+              <strong id="su_currentQty" style="color: var(--primary)"
+                >0</strong
+              >
+              units
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">Action Type *</label>
+            <select
+              id="su_actionType"
+              class="form-select"
+              onchange="onActionTypeChange()"
+            >
+              <option value="Stock In">Stock In (Receive / Add Units)</option>
+              <option value="Stock Out">
+                Stock Out (Dispatch / Remove Units)
+              </option>
+              <option value="Adjustment">
+                Direct Adjustment (Set Exact Quantity)
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label" id="su_qtyLabel">Units to Add *</label>
+            <input
+              type="number"
+              id="su_qty"
+              class="form-control"
+              placeholder="Enter units"
+              min="1"
+              step="1"
+            />
+            <div class="invalid-feedback" id="su_qty_err"></div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">Reason / Notes</label>
+            <textarea
+              id="su_notes"
+              class="form-control"
+              rows="2"
+              placeholder="e.g. Shipment received, inventory count correction, damaged goods..."
+            ></textarea>
+          </div>
+
+          <div
+            id="su_newBalanceBox"
+            style="
+              background: rgba(79, 70, 229, 0.06);
+              padding: 10px 14px;
+              border-radius: 8px;
+              font-size: 0.85rem;
+            "
+          >
+            Projected Stock: <strong id="su_projectedQty">0</strong> units
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeStockUpdateModal()">
+            Cancel
+          </button>
+          <button class="btn-primary" onclick="applyStockUpdate()">
+            Save & Record Movement
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/inventory.js"></script>
+  </body>
+</html>

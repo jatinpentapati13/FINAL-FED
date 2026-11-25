@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products — SmartStock</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome 6 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/inventory.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar"></aside>
+      <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+        onclick="closeSidebar()"
+      ></div>
+
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <nav id="topNavbar" class="top-navbar"></nav>
+
+        <div class="page-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+              "
+            >
+              <div>
+                <h1 class="page-title">Products</h1>
+                <p class="page-subtitle">
+                  Manage your product catalog, pricing, and stock levels
+                </p>
+              </div>
+              <button class="btn-primary" onclick="openAddProductModal()">
+                <i class="fas fa-plus me-2"></i>Add Product
+              </button>
+            </div>
+          </div>
+
+          <!-- Filters Bar -->
+          <div class="filters-bar">
+            <div class="search-wrapper">
+              <i
+                class="fas fa-search"
+                style="
+                  position: absolute;
+                  left: 12px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: var(--gray-400);
+                  pointer-events: none;
+                "
+              ></i>
+              <input
+                type="text"
+                id="searchProducts"
+                class="form-control"
+                placeholder="Search by name, SKU..."
+                style="padding-left: 36px; min-width: 240px"
+                oninput="filterProducts()"
+              />
+            </div>
+
+            <select
+              id="filterCategory"
+              class="form-select filter-select"
+              style="max-width: 160px"
+              onchange="filterProducts()"
+            >
+              <option value="">All Categories</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Grocery">Grocery</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Stationery">Stationery</option>
+              <option value="Home">Home</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <select
+              id="filterStatus"
+              class="form-select filter-select"
+              style="max-width: 150px"
+              onchange="filterProducts()"
+            >
+              <option value="">All Status</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+
+            <select
+              id="filterWarehouse"
+              class="form-select filter-select"
+              style="max-width: 160px"
+              onchange="filterProducts()"
+            >
+              <option value="">All Warehouses</option>
+            </select>
+
+            <select
+              id="sortProducts"
+              class="form-select filter-select"
+              style="max-width: 160px"
+              onchange="filterProducts()"
+            >
+              <option value="name_asc">Name (A–Z)</option>
+              <option value="name_desc">Name (Z–A)</option>
+              <option value="price_asc">Price (Low to High)</option>
+              <option value="price_desc">Price (High to Low)</option>
+              <option value="quantity_asc">Quantity (Lowest)</option>
+              <option value="quantity_desc">Quantity (Highest)</option>
+              <option value="newest">Newest Added</option>
+            </select>
+
+            <span
+              id="productCount"
+              style="
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                margin-left: auto;
+                white-space: nowrap;
+              "
+            ></span>
+          </div>
+
+          <!-- Products Table Card -->
+          <div class="card">
+            <div class="card-body" style="padding: 0">
+              <div
+                class="table-container"
+                style="border: none; border-radius: 0"
+              >
+                <table style="width: 100%; border-collapse: collapse">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>SKU</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Min Stock</th>
+                      <th>Supplier</th>
+                      <th>Warehouse</th>
+                      <th>Status</th>
+                      <th style="text-align: right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="productsTableBody">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty State -->
+              <div
+                id="productsEmptyState"
+                class="empty-state"
+                style="display: none"
+              >
+                <i class="fas fa-box-open"></i>
+                <h5>No products found</h5>
+                <p>
+                  Try adjusting your search criteria or add a new product to
+                  your inventory.
+                </p>
+                <button
+                  class="btn-primary"
+                  onclick="openAddProductModal()"
+                  style="margin-top: 1rem"
+                >
+                  <i class="fas fa-plus me-2"></i>Add Product
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal-overlay" style="display: none">
+      <div class="modal">
+        <div class="modal-header">
+          <h5 id="productModalTitle" class="modal-title">Add New Product</h5>
+          <button
+            onclick="closeProductModal()"
+            class="navbar-btn"
+            aria-label="Close modal"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="pm_id" />
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_name">Product Name *</label>
+                <input
+                  type="text"
+                  id="pm_name"
+                  class="form-control"
+                  placeholder="e.g. Wireless Mouse"
+                />
+                <div class="invalid-feedback" id="pm_name_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_sku">SKU *</label>
+                <input
+                  type="text"
+                  id="pm_sku"
+                  class="form-control"
+                  placeholder="e.g. MSE-001"
+                  style="text-transform: uppercase"
+                />
+                <div class="invalid-feedback" id="pm_sku_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_category">Category *</label>
+                <select id="pm_category" class="form-select">
+                  <option value="">Select category</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Grocery">Grocery</option>
+                  <option value="Clothing">Clothing</option>
+                  <option value="Stationery">Stationery</option>
+                  <option value="Home">Home</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="invalid-feedback" id="pm_cat_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_price"
+                  >Unit Price (₹) *</label
+                >
+                <input
+                  type="number"
+                  id="pm_price"
+                  class="form-control"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+                <div class="invalid-feedback" id="pm_price_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_quantity"
+                  >Current Stock Quantity *</label
+                >
+                <input
+                  type="number"
+                  id="pm_quantity"
+                  class="form-control"
+                  placeholder="0"
+                  min="0"
+                  step="1"
+                />
+                <div class="invalid-feedback" id="pm_qty_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_minStock"
+                  >Minimum Stock Alert Threshold *</label
+                >
+                <input
+                  type="number"
+                  id="pm_minStock"
+                  class="form-control"
+                  placeholder="10"
+                  min="0"
+                  step="1"
+                />
+                <div class="invalid-feedback" id="pm_min_err"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_supplier">Supplier</label>
+                <select id="pm_supplier" class="form-select">
+                  <option value="">Select supplier</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="pm_warehouse">Warehouse</label>
+                <select id="pm_warehouse" class="form-select">
+                  <option value="">Select warehouse</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="form-label" for="pm_description"
+                  >Description / Notes</label
+                >
+                <textarea
+                  id="pm_description"
+                  class="form-control"
+                  rows="2"
+                  placeholder="Product specifications, details, or notes..."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeProductModal()">
+            Cancel
+          </button>
+          <button
+            class="btn-primary"
+            id="productSaveBtn"
+            onclick="saveProduct()"
+          >
+            Add Product
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Product Modal -->
+    <div id="viewProductModal" class="modal-overlay" style="display: none">
+      <div class="modal" style="max-width: 520px">
+        <div class="modal-header">
+          <h5 class="modal-title">Product Details</h5>
+          <button onclick="closeViewProductModal()" class="navbar-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="viewProductBody">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeViewProductModal()">
+            Close
+          </button>
+          <button class="btn-primary" id="viewEditBtn">
+            <i class="fas fa-pencil me-1"></i> Edit Product
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay" style="display: none">
+      <div class="modal" style="max-width: 420px">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Deletion</h5>
+          <button onclick="closeDeleteModal()" class="navbar-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="text-align: center; padding: 1rem 0">
+            <i
+              class="fas fa-trash-can"
+              style="
+                font-size: 3rem;
+                color: var(--danger);
+                margin-bottom: 1rem;
+                display: block;
+              "
+            ></i>
+            <p style="font-size: 1rem; margin-bottom: 0.5rem">
+              Are you sure you want to delete
+              <strong id="deleteProductName"></strong>?
+            </p>
+            <p style="color: var(--text-secondary); font-size: 0.85rem">
+              This action cannot be undone and will remove the item from all
+              inventory calculations.
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeDeleteModal()">
+            Cancel
+          </button>
+          <button class="btn-danger" onclick="confirmDelete()">
+            Delete Product
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/products.js"></script>
+  </body>
+</html>
